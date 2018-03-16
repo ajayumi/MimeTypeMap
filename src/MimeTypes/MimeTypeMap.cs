@@ -10,7 +10,7 @@ namespace MimeTypes
 
         private static IDictionary<string, string> BuildMappings()
         {
-            var mappings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
+            var mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
 
                 #region Big freaking list of mime types
             
@@ -65,6 +65,7 @@ namespace MimeTypes
                 {".air", "application/vnd.adobe.air-application-installer-package+zip"},
                 {".amc", "application/mpeg"},
                 {".anx", "application/annodex"},
+                {".apk", "application/vnd.android.package-archive" },
                 {".application", "application/x-ms-application"},
                 {".art", "image/x-jg"},
                 {".asa", "application/xml"},
@@ -152,7 +153,9 @@ namespace MimeTypes
                 {".dv", "video/x-dv"},
                 {".dvi", "application/x-dvi"},
                 {".dwf", "drawing/x-dwf"},
+                {".dwg", "application/acad"},
                 {".dwp", "application/octet-stream"},
+                {".dxf", "application/x-dxf" },
                 {".dxr", "application/x-director"},
                 {".eml", "message/rfc822"},
                 {".emz", "application/octet-stream"},
@@ -174,6 +177,7 @@ namespace MimeTypes
                 {".fsx", "application/fsharp-script"},
                 {".generictest", "application/xml"},
                 {".gif", "image/gif"},
+                {".gpx", "application/gpx+xml"},
                 {".group", "text/x-ms-group"},
                 {".gsm", "audio/x-gsm"},
                 {".gtar", "application/x-gtar"},
@@ -271,6 +275,7 @@ namespace MimeTypes
                 {".manifest", "application/x-ms-manifest"},
                 {".map", "text/plain"},
                 {".master", "application/xml"},
+                {".mbox", "application/mbox"},
                 {".mda", "application/msaccess"},
                 {".mdb", "application/x-msaccess"},
                 {".mde", "application/msaccess"},
@@ -303,6 +308,7 @@ namespace MimeTypes
                 {".mpv2", "video/mpeg"},
                 {".mqv", "video/quicktime"},
                 {".ms", "application/x-troff-ms"},
+                {".msg", "application/vnd.ms-outlook"},
                 {".msi", "application/octet-stream"},
                 {".mso", "application/octet-stream"},
                 {".mts", "video/vnd.dlna.mpeg-tts"},
@@ -400,6 +406,7 @@ namespace MimeTypes
                 {".psess", "application/xml"},
                 {".psm", "application/octet-stream"},
                 {".psp", "application/octet-stream"},
+                {".pst", "application/vnd.ms-outlook"},
                 {".pub", "application/x-mspublisher"},
                 {".pwz", "application/vnd.ms-powerpoint"},
                 {".qht", "text/x-html-insertion"},
@@ -431,6 +438,7 @@ namespace MimeTypes
                 {".rqy", "text/x-ms-rqy"},
                 {".rtf", "application/rtf"},
                 {".rtx", "text/richtext"},
+                {".rvt", "application/octet-stream" },
                 {".ruleset", "application/xml"},
                 {".s", "text/plain"},
                 {".safariextz", "application/x-safari-safariextz"},
@@ -452,6 +460,7 @@ namespace MimeTypes
                 {".sit", "application/x-stuffit"},
                 {".sitemap", "application/xml"},
                 {".skin", "application/xml"},
+                {".skp", "application/x-koan" },
                 {".sldm", "application/vnd.ms-powerpoint.slide.macroEnabled.12"},
                 {".sldx", "application/vnd.openxmlformats-officedocument.presentationml.slide"},
                 {".slk", "application/vnd.ms-excel"},
@@ -480,6 +489,8 @@ namespace MimeTypes
                 {".svc", "application/xml"},
                 {".svg", "image/svg+xml"},
                 {".swf", "application/x-shockwave-flash"},
+                {".step", "application/step"},
+                {".stp", "application/step"},
                 {".t", "application/x-troff"},
                 {".tar", "application/x-tar"},
                 {".tcl", "application/x-tcl"},
@@ -605,6 +616,7 @@ namespace MimeTypes
                 {".xltx", "application/vnd.openxmlformats-officedocument.spreadsheetml.template"},
                 {".xlw", "application/vnd.ms-excel"},
                 {".xml", "text/xml"},
+                {".xmp", "application/octet-stream" },
                 {".xmta", "application/xml"},
                 {".xof", "x-world/x-vrml"},
                 {".XOML", "text/plain"},
@@ -630,6 +642,7 @@ namespace MimeTypes
                 {"application/octet-stream", ".bin"},
                 {"application/onenote", ".one"},
                 {"application/postscript", ".eps"},
+                {"application/step", ".step"},
                 {"application/vnd.ms-excel", ".xls"},
                 {"application/vnd.ms-powerpoint", ".ppt"},
                 {"application/vnd.ms-works", ".wks"},
@@ -645,6 +658,7 @@ namespace MimeTypes
                 {"audio/basic", ".snd"},
                 {"audio/mid", ".midi"},
                 {"audio/wav", ".wav"},
+                {"audio/x-m4a", ".m4a"},
                 {"audio/x-mpegurl", ".m3u"},
                 {"audio/x-pn-realaudio", ".ra"},
                 {"audio/x-smd", ".smd"},
@@ -707,6 +721,11 @@ namespace MimeTypes
 
         public static string GetExtension(string mimeType)
         {
+             return GetExtension(mimeType, true);
+        }
+        
+        public static string GetExtension(string mimeType, bool throwErrorIfNotFound)
+        {
             if (mimeType == null)
             {
                 throw new ArgumentNullException("mimeType");
@@ -723,8 +742,14 @@ namespace MimeTypes
             {
                 return extension;
             }
-
-            throw new ArgumentException("Requested mime type is not registered: " + mimeType);
+            if (throwErrorIfNotFound)
+            {
+                throw new ArgumentException("Requested mime type is not registered: " + mimeType);
+            }
+            else
+            {
+                return string.Empty;   
+            }
         }
     }
 }
